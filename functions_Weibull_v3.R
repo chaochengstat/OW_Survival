@@ -45,11 +45,11 @@ OW.f=function(u=6,W,X,Z,Time,Event,ps.model,cen.trt.model,cen.con.model,...) {
   Hbeta0  = 1/n * t(((1-Z)*Event*((Time>=u) - tau0))/Kc.con) %*% (ps*(1-ps)*W)
   # obtain variance estimator
   Itau = w.trt*Z*Event*((Time>=u)-tau1)/Kc.trt - w.con*(1-Z)*Event*((Time>=u)-tau0)/Kc.con
-  Itheta1 = ( Z*( ((1-Event) - Time^gamma1.est * exp( c(X %*% theta1.est)))*X  ) ) %*% t(Htheta1 %*% solve(Etheta1))
-  Itheta0 = ( (1-Z)*( ((1-Event) - Time^gamma0.est * exp( c(X %*% theta0.est)))*X  ) ) %*% t(Htheta0 %*% solve(Etheta0))
+  Itheta1 = ( Z*( ((1-Event) - Time^gamma1.est * exp( c(X %*% theta1.est)))*X  ) ) %*% t(Htheta1 %*% solve(Etheta1,tol=1e-25))
+  Itheta0 = ( (1-Z)*( ((1-Event) - Time^gamma0.est * exp( c(X %*% theta0.est)))*X  ) ) %*% t(Htheta0 %*% solve(Etheta0,tol=1e-25))
   Igamma1 = Hgamma1 * 1/Egamma1 * Z * ( (1-Event)*(1/gamma1.est + log(Time)) - Time^gamma1.est * log(Time) * exp(c(X %*% theta1.est))  )
   Igamma0 = Hgamma0 * 1/Egamma0 * (1-Z) * ( (1-Event)*(1/gamma0.est + log(Time)) - Time^gamma0.est * log(Time) * exp(c(X %*% theta0.est))  )
-  Ibeta = ((Z-ps)*W) %*% t((Hbeta1 -Hbeta0) %*% solve(Ebeta))
+  Ibeta = ((Z-ps)*W) %*% t((Hbeta1 -Hbeta0) %*% solve(Ebeta,tol=1e-25))
   I = 1/Etau *(c(Itau)+c(Itheta1)-c(Itheta0)+c(Igamma1)-c(Igamma0)+c(Ibeta))
   var.est=sum(I^2)/(n^2)
   # point estimate
@@ -173,11 +173,11 @@ IPWC.f=function(u=6,W,X,Z,Time,Event,q,ps.model,...) {
   Hbeta0  = 1/n * t(((1-Z)*Event*((Time>=u) - tau0))/Kc.con) %*% (1/((1-ps)^2) *ps*(1-ps)*W)
   # obtain variance estimator
   Itau = w.trt*Z*Event*((Time>=u)-tau1)/Kc.trt - w.con*(1-Z)*Event*((Time>=u)-tau0)/Kc.con
-  Itheta1 = ( Z*( ((1-Event) - Time^gamma1.est * exp( c(X %*% theta1.est)))*X  ) ) %*% t(Htheta1 %*% solve(Etheta1))
-  Itheta0 = ( (1-Z)*( ((1-Event) - Time^gamma0.est * exp( c(X %*% theta0.est)))*X  ) ) %*% t(Htheta0 %*% solve(Etheta0))
+  Itheta1 = ( Z*( ((1-Event) - Time^gamma1.est * exp( c(X %*% theta1.est)))*X  ) ) %*% t(Htheta1 %*% solve(Etheta1,tol=1e-25))
+  Itheta0 = ( (1-Z)*( ((1-Event) - Time^gamma0.est * exp( c(X %*% theta0.est)))*X  ) ) %*% t(Htheta0 %*% solve(Etheta0,tol=1e-25))
   Igamma1 = Hgamma1 * 1/Egamma1 * Z * ( (1-Event)*(1/gamma1.est + log(Time)) - Time^gamma1.est * log(Time) * exp(c(X %*% theta1.est))  )
   Igamma0 = Hgamma0 * 1/Egamma0 * (1-Z) * ( (1-Event)*(1/gamma0.est + log(Time)) - Time^gamma0.est * log(Time) * exp(c(X %*% theta0.est))  )
-  Ibeta = ((Z-ps)*W) %*% t((Hbeta1 -Hbeta0) %*% solve(Ebeta))
+  Ibeta = ((Z-ps)*W) %*% t((Hbeta1 -Hbeta0) %*% solve(Ebeta,tol=1e-25))
   I = 1/Etau *(c(Itau)+c(Itheta1)-c(Itheta0)+c(Igamma1)-c(Igamma0)+c(Ibeta))
   var.est=sum(I^2)/(n^2)
   # point estimate
@@ -255,11 +255,11 @@ IPWA.f=function(u=6,W,X,Z,Time,Event,q,ps.model,...) {
   Hbeta0  = 1/n * t(((1-Z)*Event*((Time>=u) - tau0))/Kc.con) %*% (1/((1-ps)^2) *ps*(1-ps)*W)
   # obtain variance estimator
   Itau = w.trt*Z*Event*((Time>=u)-tau1)/Kc.trt - w.con*(1-Z)*Event*((Time>=u)-tau0)/Kc.con
-  Itheta1 = ( Z*( ((1-Event) - Time^gamma1.est * exp( c(X %*% theta1.est)))*X  ) ) %*% t(Htheta1 %*% solve(Etheta1))
-  Itheta0 = ( (1-Z)*( ((1-Event) - Time^gamma0.est * exp( c(X %*% theta0.est)))*X  ) ) %*% t(Htheta0 %*% solve(Etheta0))
+  Itheta1 = ( Z*( ((1-Event) - Time^gamma1.est * exp( c(X %*% theta1.est)))*X  ) ) %*% t(Htheta1 %*% solve(Etheta1,tol=1e-25))
+  Itheta0 = ( (1-Z)*( ((1-Event) - Time^gamma0.est * exp( c(X %*% theta0.est)))*X  ) ) %*% t(Htheta0 %*% solve(Etheta0,tol=1e-25))
   Igamma1 = Hgamma1 * 1/Egamma1 * Z * ( (1-Event)*(1/gamma1.est + log(Time)) - Time^gamma1.est * log(Time) * exp(c(X %*% theta1.est))  )
   Igamma0 = Hgamma0 * 1/Egamma0 * (1-Z) * ( (1-Event)*(1/gamma0.est + log(Time)) - Time^gamma0.est * log(Time) * exp(c(X %*% theta0.est))  )
-  Ibeta = ((Z-ps)*W) %*% t((Hbeta1 -Hbeta0) %*% solve(Ebeta))
+  Ibeta = ((Z-ps)*W) %*% t((Hbeta1 -Hbeta0) %*% solve(Ebeta,tol=1e-25))
   I = 1/Etau *(c(Itau)+c(Itheta1)-c(Itheta0)+c(Igamma1)-c(Igamma0)+c(Ibeta))
   var.est=sum(I^2)/(n^2)
   # point estimate
@@ -312,11 +312,11 @@ OW.f2=function(u=6,W,X,Z,Time,Event,ps.model,cen.trt.model,cen.con.model,...) {
   Hbeta0  = 1/n * t(((1-Z)*((Time>=u) ))/Kc.con) %*% (ps*(1-ps)*W) - 1/n* t(tau0*(1-Z)) %*% (ps*(1-ps)*W)
   # obtain variance estimator
   Itau = w.trt*Z*((Time>=u))/Kc.trt - w.con*(1-Z)*((Time>=u))/Kc.con - w.trt*tau1*Z + w.con*tau0*(1-Z)
-  Itheta1 = ( Z*( ((1-Event) - Time^gamma1.est * exp( c(X %*% theta1.est)))*X  ) ) %*% t(Htheta1 %*% solve(Etheta1))
-  Itheta0 = ( (1-Z)*( ((1-Event) - Time^gamma0.est * exp( c(X %*% theta0.est)))*X  ) ) %*% t(Htheta0 %*% solve(Etheta0))
+  Itheta1 = ( Z*( ((1-Event) - Time^gamma1.est * exp( c(X %*% theta1.est)))*X  ) ) %*% t(Htheta1 %*% solve(Etheta1,tol=1e-25))
+  Itheta0 = ( (1-Z)*( ((1-Event) - Time^gamma0.est * exp( c(X %*% theta0.est)))*X  ) ) %*% t(Htheta0 %*% solve(Etheta0,tol=1e-25))
   Igamma1 = Hgamma1 * 1/Egamma1 * Z * ( (1-Event)*(1/gamma1.est + log(Time)) - Time^gamma1.est * log(Time) * exp(c(X %*% theta1.est))  )
   Igamma0 = Hgamma0 * 1/Egamma0 * (1-Z) * ( (1-Event)*(1/gamma0.est + log(Time)) - Time^gamma0.est * log(Time) * exp(c(X %*% theta0.est))  )
-  Ibeta = ((Z-ps)*W) %*% t((Hbeta1 -Hbeta0) %*% solve(Ebeta))
+  Ibeta = ((Z-ps)*W) %*% t((Hbeta1 -Hbeta0) %*% solve(Ebeta,tol=1e-25))
   I = 1/Etau *(c(Itau)+c(Itheta1)-c(Itheta0)+c(Igamma1)-c(Igamma0)+c(Ibeta))
   var.est=sum(I^2)/(n^2)
   # point estimate
@@ -368,11 +368,11 @@ IPW.f2=function(u=6,W,X,Z,Time,Event,ps.model,cen.trt.model,cen.con.model,...) {
   Hbeta0  = 1/n * t(((1-Z)*((Time>=u)))/Kc.con) %*% (1/((1-ps)^2) *ps*(1-ps)*W) - 1/n* t(tau0*(1-Z)) %*% (1/((1-ps)^2) *ps*(1-ps)*W)
   # obtain variance estimator
   Itau = w.trt*Z*((Time>=u))/Kc.trt - w.con*(1-Z)*((Time>=u))/Kc.con - w.trt*tau1*Z + w.con*tau0*(1-Z)
-  Itheta1 = ( Z*( ((1-Event) - Time^gamma1.est * exp( c(X %*% theta1.est)))*X  ) ) %*% t(Htheta1 %*% solve(Etheta1))
-  Itheta0 = ( (1-Z)*( ((1-Event) - Time^gamma0.est * exp( c(X %*% theta0.est)))*X  ) ) %*% t(Htheta0 %*% solve(Etheta0))
+  Itheta1 = ( Z*( ((1-Event) - Time^gamma1.est * exp( c(X %*% theta1.est)))*X  ) ) %*% t(Htheta1 %*% solve(Etheta1,tol=1e-25))
+  Itheta0 = ( (1-Z)*( ((1-Event) - Time^gamma0.est * exp( c(X %*% theta0.est)))*X  ) ) %*% t(Htheta0 %*% solve(Etheta0,tol=1e-25))
   Igamma1 = Hgamma1 * 1/Egamma1 * Z * ( (1-Event)*(1/gamma1.est + log(Time)) - Time^gamma1.est * log(Time) * exp(c(X %*% theta1.est))  )
   Igamma0 = Hgamma0 * 1/Egamma0 * (1-Z) * ( (1-Event)*(1/gamma0.est + log(Time)) - Time^gamma0.est * log(Time) * exp(c(X %*% theta0.est))  )
-  Ibeta = ((Z-ps)*W) %*% t((Hbeta1 -Hbeta0) %*% solve(Ebeta))
+  Ibeta = ((Z-ps)*W) %*% t((Hbeta1 -Hbeta0) %*% solve(Ebeta,tol=1e-25))
   I = 1/Etau *(c(Itau)+c(Itheta1)-c(Itheta0)+c(Igamma1)-c(Igamma0)+c(Ibeta))
   var.est=sum(I^2)/(n^2)
   # point estimate
@@ -440,11 +440,11 @@ IPWC.f2=function(u=6,W,X,Z,Time,Event,q,ps.model,...) {
   Hbeta0  = 1/n * t(((1-Z)*((Time>=u) ))/Kc.con) %*% (1/((1-ps)^2) *ps*(1-ps)*W) - 1/n* t(tau0*(1-Z)) %*% (1/((1-ps)^2) *ps*(1-ps)*W)
   # obtain variance estimator
   Itau = w.trt*Z*((Time>=u))/Kc.trt - w.con*(1-Z)*((Time>=u))/Kc.con - w.trt*tau1*Z + w.con*tau0*(1-Z)
-  Itheta1 = ( Z*( ((1-Event) - Time^gamma1.est * exp( c(X %*% theta1.est)))*X  ) ) %*% t(Htheta1 %*% solve(Etheta1))
-  Itheta0 = ( (1-Z)*( ((1-Event) - Time^gamma0.est * exp( c(X %*% theta0.est)))*X  ) ) %*% t(Htheta0 %*% solve(Etheta0))
+  Itheta1 = ( Z*( ((1-Event) - Time^gamma1.est * exp( c(X %*% theta1.est)))*X  ) ) %*% t(Htheta1 %*% solve(Etheta1,tol=1e-25))
+  Itheta0 = ( (1-Z)*( ((1-Event) - Time^gamma0.est * exp( c(X %*% theta0.est)))*X  ) ) %*% t(Htheta0 %*% solve(Etheta0,tol=1e-25))
   Igamma1 = Hgamma1 * 1/Egamma1 * Z * ( (1-Event)*(1/gamma1.est + log(Time)) - Time^gamma1.est * log(Time) * exp(c(X %*% theta1.est))  )
   Igamma0 = Hgamma0 * 1/Egamma0 * (1-Z) * ( (1-Event)*(1/gamma0.est + log(Time)) - Time^gamma0.est * log(Time) * exp(c(X %*% theta0.est))  )
-  Ibeta = ((Z-ps)*W) %*% t((Hbeta1 -Hbeta0) %*% solve(Ebeta))
+  Ibeta = ((Z-ps)*W) %*% t((Hbeta1 -Hbeta0) %*% solve(Ebeta,tol=1e-25))
   I = 1/Etau *(c(Itau)+c(Itheta1)-c(Itheta0)+c(Igamma1)-c(Igamma0)+c(Ibeta))
   var.est=sum(I^2)/(n^2)
   # point estimate
@@ -522,11 +522,11 @@ IPWA.f2=function(u=6,W,X,Z,Time,Event,q,ps.model,...) {
   Hbeta0  = 1/n * t(((1-Z)*((Time>=u) ))/Kc.con) %*% (1/((1-ps)^2) *ps*(1-ps)*W) - 1/n* t(tau0*(1-Z)) %*% (1/((1-ps)^2) *ps*(1-ps)*W)
   # obtain variance estimator
   Itau = w.trt*Z*((Time>=u))/Kc.trt - w.con*(1-Z)*((Time>=u))/Kc.con - w.trt*tau1*Z + w.con*tau0*(1-Z)
-  Itheta1 = ( Z*( ((1-Event) - Time^gamma1.est * exp( c(X %*% theta1.est)))*X  ) ) %*% t(Htheta1 %*% solve(Etheta1))
-  Itheta0 = ( (1-Z)*( ((1-Event) - Time^gamma0.est * exp( c(X %*% theta0.est)))*X  ) ) %*% t(Htheta0 %*% solve(Etheta0))
+  Itheta1 = ( Z*( ((1-Event) - Time^gamma1.est * exp( c(X %*% theta1.est)))*X  ) ) %*% t(Htheta1 %*% solve(Etheta1,tol=1e-25))
+  Itheta0 = ( (1-Z)*( ((1-Event) - Time^gamma0.est * exp( c(X %*% theta0.est)))*X  ) ) %*% t(Htheta0 %*% solve(Etheta0,tol=1e-25))
   Igamma1 = Hgamma1 * 1/Egamma1 * Z * ( (1-Event)*(1/gamma1.est + log(Time)) - Time^gamma1.est * log(Time) * exp(c(X %*% theta1.est))  )
   Igamma0 = Hgamma0 * 1/Egamma0 * (1-Z) * ( (1-Event)*(1/gamma0.est + log(Time)) - Time^gamma0.est * log(Time) * exp(c(X %*% theta0.est))  )
-  Ibeta = ((Z-ps)*W) %*% t((Hbeta1 -Hbeta0) %*% solve(Ebeta))
+  Ibeta = ((Z-ps)*W) %*% t((Hbeta1 -Hbeta0) %*% solve(Ebeta,tol=1e-25))
   I = 1/Etau *(c(Itau)+c(Itheta1)-c(Itheta0)+c(Igamma1)-c(Igamma0)+c(Ibeta))
   var.est=sum(I^2)/(n^2)
   # point estimate
