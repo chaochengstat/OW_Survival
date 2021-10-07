@@ -106,14 +106,14 @@ S.IPW1=function(u=6,W,X,Z,Time,Event,ps.model,cen.trt.model,cen.con.model,...) {
   Itheta1 = ( Z*( ((1-Event) - Time^gamma1.est * exp( c(X %*% theta1.est)))*X  ) ) %*% t(Htheta1 %*% solve(Etheta1,tol=1e-25))
   Igamma1 = Hgamma1 * 1/Egamma1 * Z * ( (1-Event)*(1/gamma1.est + log(Time)) - Time^gamma1.est * log(Time) * exp(c(X %*% theta1.est))  )
   Ibeta = ((Z-ps)*W) %*% t((Hbeta1) %*% solve(Ebeta,tol=1e-25))
-  I = 1/Etau *(c(Itau)+c(Itheta1)-c(Itheta0)+c(Igamma1)-c(Igamma0)+c(Ibeta))
+  I = 1/Etau *(c(Itau)+c(Itheta1)+c(Igamma1)+c(Ibeta))
   var.tau1=sum(I^2)/(n^2)
   # variance estimator for tau0
   Itau = w.con*(1-Z)*Event*((Time>=u)-tau0)/Kc.con
   Itheta0 = ( (1-Z)*( ((1-Event) - Time^gamma0.est * exp( c(X %*% theta0.est)))*X  ) ) %*% t(Htheta0 %*% solve(Etheta0,tol=1e-25))
   Igamma0 = Hgamma0 * 1/Egamma0 * (1-Z) * ( (1-Event)*(1/gamma0.est + log(Time)) - Time^gamma0.est * log(Time) * exp(c(X %*% theta0.est))  )
   Ibeta = ((Z-ps)*W) %*% t((Hbeta0) %*% solve(Ebeta,tol=1e-25))
-  I = 1/Etau *(c(Itau)+c(Itheta0)+c(Igamma1)+c(Ibeta))
+  I = 1/Etau *(c(Itau)+c(Itheta0)+c(Igamma0)+c(Ibeta))
   var.tau0=sum(I^2)/(n^2)
   # return
   c(S1=tau1,S0=tau0,var.S1=var.tau1,var.S0=var.tau0)
