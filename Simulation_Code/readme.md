@@ -11,5 +11,5 @@ Content:
 
 To repeat the simulation results, please follow the procedures listed below:
 - Step 1: put all these R scripts in a folder
-- Step 2: run R scripts (2)-(7) either simultaneously or separately, and then you will get a the raw simulation results.
-- Step 3: run R scripts (8)-(9) to transfer the raw simulation results to readable tables.
+- Step 2: run R scripts 2-7 either simultaneously or separately, and then you will get a the raw simulation results.
+- Step 3: run R scripts 8-9 to transfer the raw simulation results to readable tables.
