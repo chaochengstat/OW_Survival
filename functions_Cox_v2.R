@@ -54,8 +54,8 @@ SurvEffectWithCox=function(Data,
     } else {
       Kc.trt=CensorScoreFun(CoxModel=Censor.trt.model,TimeVec=rep(t,length(Censor.trt.model$y)))
       Kc.con=CensorScoreFun(CoxModel=Censor.con.model,TimeVec=rep(t,length(Censor.con.model$y)))
-      delta1 = sum(w.trt*as.numeric(Data.trt[,SurvTime]>=t)/Kc.trt)/sum(w.trt)
-      delta0 = sum(w.con*as.numeric(Data.con[,SurvTime]>=t)/Kc.con)/sum(w.con)
+      delta1 = sum(w.trt*as.numeric(Data.trt[,SurvTime]>t)/Kc.trt)/sum(w.trt)
+      delta0 = sum(w.con*as.numeric(Data.con[,SurvTime]>t)/Kc.con)/sum(w.con)
       return(delta1-delta0)
     }
   } else if (Method=="OW") {
@@ -70,8 +70,8 @@ SurvEffectWithCox=function(Data,
     } else {
       Kc.trt=CensorScoreFun(CoxModel=Censor.trt.model,TimeVec=rep(t,length(Censor.trt.model$y)))
       Kc.con=CensorScoreFun(CoxModel=Censor.con.model,TimeVec=rep(t,length(Censor.con.model$y)))
-      delta1 = sum(w.trt*as.numeric(Data.trt[,SurvTime]>=t)/Kc.trt)/sum(w.trt)
-      delta0 = sum(w.con*as.numeric(Data.con[,SurvTime]>=t)/Kc.con)/sum(w.con)
+      delta1 = sum(w.trt*as.numeric(Data.trt[,SurvTime]>t)/Kc.trt)/sum(w.trt)
+      delta0 = sum(w.con*as.numeric(Data.con[,SurvTime]>t)/Kc.con)/sum(w.con)
       return(delta1-delta0)
     }
   } else if (Method=="Symmetric") {
@@ -98,9 +98,9 @@ SurvEffectWithCox=function(Data,
       Kc.trt=CensorScoreFun(CoxModel=Censor.trt.model,TimeVec=rep(t,length(Censor.trt.model$y)))
       Kc.con=CensorScoreFun(CoxModel=Censor.con.model,TimeVec=rep(t,length(Censor.con.model$y)))
       w.trt = 1/PS[which(Data.trim[,Treatment]==1)]
-      delta1 = sum(w.trt*as.numeric(Data.trim.trt[,SurvTime]>=t)/Kc.trt)/sum(w.trt)
+      delta1 = sum(w.trt*as.numeric(Data.trim.trt[,SurvTime]>t)/Kc.trt)/sum(w.trt)
       w.con = 1/(1-PS[which(Data.trim[,Treatment]==0)])
-      delta0 = sum(w.con*as.numeric(Data.trim.con[,SurvTime]>=t)/Kc.con)/sum(w.con)
+      delta0 = sum(w.con*as.numeric(Data.trim.con[,SurvTime]>t)/Kc.con)/sum(w.con)
       return(delta1-delta0)
     }
   } else if (Method=="Asymmetric") {
@@ -135,9 +135,9 @@ SurvEffectWithCox=function(Data,
       Kc.trt=CensorScoreFun(CoxModel=Censor.trt.model,TimeVec=rep(t,length(Censor.trt.model$y)))
       Kc.con=CensorScoreFun(CoxModel=Censor.con.model,TimeVec=rep(t,length(Censor.con.model$y)))
       w.trt = 1/PS[which(Data.trim[,Treatment]==1)]
-      delta1 = sum(w.trt*as.numeric(Data.trim.trt[,SurvTime]>=t)/Kc.trt)/sum(w.trt)
+      delta1 = sum(w.trt*as.numeric(Data.trim.trt[,SurvTime]>t)/Kc.trt)/sum(w.trt)
       w.con = 1/(1-PS[which(Data.trim[,Treatment]==0)])
-      delta0 = sum(w.con*as.numeric(Data.trim.con[,SurvTime]>=t)/Kc.con)/sum(w.con)
+      delta0 = sum(w.con*as.numeric(Data.trim.con[,SurvTime]>t)/Kc.con)/sum(w.con)
       return(delta1-delta0)
     }
   } else {
