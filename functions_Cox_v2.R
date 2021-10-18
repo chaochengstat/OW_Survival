@@ -9,18 +9,6 @@ SurvEffectWithCox=function(Data,
                            Method="IPW",
                            alpha=0.05,
                            q=0.01) {
-  
-  # Data=rhc
-  # t=60
-  # Treatment="swang1"
-  # SurvTime="survtime"
-  # Status="death"
-  # PS.formula=as.formula(paste(Treatment,"~",paste(Covariates,collapse="+"),sep=""))
-  # Cox.formula=as.formula(paste("Surv(",SurvTime,",I(1-", Status,"))","~",paste(Covariates,collapse="+"),sep=""))
-  # Type=1
-  # Method="IPW"
-  # alpha=0.05
-  # q=0.05
   CensorScoreFun=function(CoxModel,TimeVec) {
     LinearPredictor=CoxModel$linear.predictors
     BaselineHazardForm=basehaz(CoxModel,centered=T) # baseline hazard data frame
@@ -48,8 +36,8 @@ SurvEffectWithCox=function(Data,
     if (Type==1) {
       Kc.trt=CensorScoreFun(CoxModel=Censor.trt.model,TimeVec=Data.trt[,SurvTime])
       Kc.con=CensorScoreFun(CoxModel=Censor.con.model,TimeVec=Data.con[,SurvTime])
-      delta1 = sum(w.trt*Data.trt[,Status]*as.numeric(Data.trt[,SurvTime]>=t)/Kc.trt)/sum(w.trt*Data.trt[,Status]/Kc.trt)
-      delta0 = sum(w.con*Data.con[,Status]*as.numeric(Data.con[,SurvTime]>=t)/Kc.con)/sum(w.con*Data.con[,Status]/Kc.con)
+      delta1 = 1-sum(w.trt*Data.trt[,Status]*as.numeric(Data.trt[,SurvTime]<=t)/Kc.trt)/sum(w.trt)
+      delta0 = 1-sum(w.con*Data.con[,Status]*as.numeric(Data.con[,SurvTime]<=t)/Kc.con)/sum(w.con)
       return(delta1-delta0)
     } else {
       Kc.trt=CensorScoreFun(CoxModel=Censor.trt.model,TimeVec=rep(t,length(Censor.trt.model$y)))
@@ -64,8 +52,8 @@ SurvEffectWithCox=function(Data,
     if (Type==1) {
       Kc.trt=CensorScoreFun(CoxModel=Censor.trt.model,TimeVec=Data.trt[,SurvTime])
       Kc.con=CensorScoreFun(CoxModel=Censor.con.model,TimeVec=Data.con[,SurvTime])
-      delta1 = sum(w.trt*Data.trt[,Status]*as.numeric(Data.trt[,SurvTime]>=t)/Kc.trt)/sum(w.trt*Data.trt[,Status]/Kc.trt)
-      delta0 = sum(w.con*Data.con[,Status]*as.numeric(Data.con[,SurvTime]>=t)/Kc.con)/sum(w.con*Data.con[,Status]/Kc.con)
+      delta1 = 1-sum(w.trt*Data.trt[,Status]*as.numeric(Data.trt[,SurvTime]<=t)/Kc.trt)/sum(w.trt)
+      delta0 = 1-sum(w.con*Data.con[,Status]*as.numeric(Data.con[,SurvTime]<=t)/Kc.con)/sum(w.con)
       return(delta1-delta0)
     } else {
       Kc.trt=CensorScoreFun(CoxModel=Censor.trt.model,TimeVec=rep(t,length(Censor.trt.model$y)))
@@ -90,9 +78,9 @@ SurvEffectWithCox=function(Data,
       Kc.trt=CensorScoreFun(CoxModel=Censor.trt.model,TimeVec=Data.trim.trt[,SurvTime])
       Kc.con=CensorScoreFun(CoxModel=Censor.con.model,TimeVec=Data.trim.con[,SurvTime])
       w.trt = 1/PS[which(Data.trim[,Treatment]==1)]
-      delta1 = sum(w.trt*Data.trim.trt[,Status]*as.numeric(Data.trim.trt[,SurvTime]>=t)/Kc.trt)/sum(w.trt*Data.trim.trt[,Status]/Kc.trt)
+      delta1 = 1-sum(w.trt*Data.trim.trt[,Status]*as.numeric(Data.trim.trt[,SurvTime]<=t)/Kc.trt)/sum(w.trt)
       w.con = 1/(1-PS[which(Data.trim[,Treatment]==0)])
-      delta0 = sum(w.con*Data.trim.con[,Status]*as.numeric(Data.trim.con[,SurvTime]>=t)/Kc.con)/sum(w.con*Data.trim.con[,Status]/Kc.con)
+      delta0 = 1-sum(w.con*Data.trim.con[,Status]*as.numeric(Data.trim.con[,SurvTime]<=t)/Kc.con)/sum(w.con)
       return(delta1-delta0)
     } else {
       Kc.trt=CensorScoreFun(CoxModel=Censor.trt.model,TimeVec=rep(t,length(Censor.trt.model$y)))
@@ -127,9 +115,9 @@ SurvEffectWithCox=function(Data,
       Kc.trt=CensorScoreFun(CoxModel=Censor.trt.model,TimeVec=Data.trim.trt[,SurvTime])
       Kc.con=CensorScoreFun(CoxModel=Censor.con.model,TimeVec=Data.trim.con[,SurvTime])
       w.trt = 1/PS[which(Data.trim[,Treatment]==1)]
-      delta1 = sum(w.trt*Data.trim.trt[,Status]*as.numeric(Data.trim.trt[,SurvTime]>=t)/Kc.trt)/sum(w.trt*Data.trim.trt[,Status]/Kc.trt)
+      delta1 = 1-sum(w.trt*Data.trim.trt[,Status]*as.numeric(Data.trim.trt[,SurvTime]<=t)/Kc.trt)/sum(w.trt)
       w.con = 1/(1-PS[which(Data.trim[,Treatment]==0)])
-      delta0 = sum(w.con*Data.trim.con[,Status]*as.numeric(Data.trim.con[,SurvTime]>=t)/Kc.con)/sum(w.con*Data.trim.con[,Status]/Kc.con)
+      delta0 = 1-sum(w.con*Data.trim.con[,Status]*as.numeric(Data.trim.con[,SurvTime]<=t)/Kc.con)/sum(w.con)
       return(delta1-delta0)
     } else {
       Kc.trt=CensorScoreFun(CoxModel=Censor.trt.model,TimeVec=rep(t,length(Censor.trt.model$y)))
