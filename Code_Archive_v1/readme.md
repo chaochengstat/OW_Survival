@@ -1,1 +1,1 @@
-
+This folder contains the R code for implementing the proposed methods in the older version manuscript (the original manuscript submitted to American Journal of Epidemiology). We slightly changed the proposed methods during revising the manuscript.
