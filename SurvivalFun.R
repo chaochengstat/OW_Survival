@@ -29,27 +29,27 @@ S.OW1=function(u=6,W,X,Z,Time,Event,ps.model,cen.trt.model,cen.con.model,...) {
   #Sgamma0 = (1-Z) * ( (1-Event)*(1/gamma0.est + log(Time)) - Time^gamma0.est *log(Time) *exp(c(X %*% theta0.est))   )
   # Taylor Expansion for the Survival function in treatment group
   w.trt = 1-ps
-  tau1 = sum(w.trt*Z*Event*as.numeric(Time>=u)/Kc.trt)/sum(w.trt*Z*Event/Kc.trt)
+  tau1 = 1-sum(w.trt*Z*Event*as.numeric(Time<=u)/Kc.trt)/sum(w.trt*Z)
   Etau = mean(ps*(1-ps))
-  Htheta1 = 1/n * t((w.trt * Z * Event * ((Time>=u) - tau1) )/Kc.trt * Time^gamma1.est * exp(c(X %*% theta1.est))) %*% X 
-  Hgamma1 = 1/n * sum( (w.trt * Z * Event * ((Time>=u) - tau1) )/Kc.trt * Time^gamma1.est * log(Time) * exp(c(X %*% theta1.est)))
-  Hbeta1  = 1/n * t((Z*Event*((Time>=u) - tau1))/Kc.trt) %*% (-1*ps*(1-ps)*W)
+  Htheta1 = 1/n * t((w.trt * Z * Event * (Time<=u) )/Kc.trt * Time^gamma1.est * exp(c(X %*% theta1.est))) %*% X 
+  Hgamma1 = 1/n * sum( (w.trt * Z * Event * (Time<=u) )/Kc.trt * Time^gamma1.est * log(Time) * exp(c(X %*% theta1.est)))
+  Hbeta1  = 1/n * t( Z*(Event*(Time<=u)/Kc.trt - (1-tau1)) ) %*% (-1*ps*(1-ps)*X)
   # Taylor Expansion for the Survival function in control group
   w.con = ps
-  tau0 = sum(w.con*(1-Z)*Event*as.numeric(Time>=u)/Kc.con)/sum(w.con*(1-Z)*Event/Kc.con)
+  tau0 = 1-sum(w.con*(1-Z)*Event*as.numeric(Time<=u)/Kc.con)/sum(w.con*(1-Z))
   Etau = mean(ps*(1-ps))
-  Htheta0 = 1/n * t((w.con * (1-Z) * Event * ((Time>=u) - tau0) )/Kc.con * Time^gamma0.est * exp(c(X %*% theta0.est))) %*% X 
-  Hgamma0 = 1/n * sum( (w.con * (1-Z) * Event * ((Time>=u) - tau0) )/Kc.con * Time^gamma0.est * log(Time) * exp(c(X %*% theta0.est)))
-  Hbeta0  = 1/n * t(((1-Z)*Event*((Time>=u) - tau0))/Kc.con) %*% (ps*(1-ps)*W)
+  Htheta0 = 1/n * t((w.con * (1-Z) * Event * (Time<=u) )/Kc.con * Time^gamma0.est * exp(c(X %*% theta0.est))) %*% X 
+  Hgamma0 = 1/n * sum( (w.con * (1-Z) * Event * (Time<=u) )/Kc.con * Time^gamma0.est * log(Time) * exp(c(X %*% theta0.est)))
+  Hbeta0  = 1/n * t( (1-Z)*(1-Event*(Time<=u)/Kc.con - (1-tau0))  ) %*% (ps*(1-ps)*X)
   # variance estimator for tau1
-  Itau = w.trt*Z*Event*((Time>=u)-tau1)/Kc.trt
+  Itau = w.trt*Z*(Event*(Time<=u)/Kc.trt-(1-tau1))
   Itheta1 = ( Z*( ((1-Event) - Time^gamma1.est * exp( c(X %*% theta1.est)))*X  ) ) %*% t(Htheta1 %*% solve(Etheta1,tol=1e-25))
   Igamma1 = Hgamma1 * 1/Egamma1 * Z * ( (1-Event)*(1/gamma1.est + log(Time)) - Time^gamma1.est * log(Time) * exp(c(X %*% theta1.est))  )
   Ibeta = ((Z-ps)*W) %*% t((Hbeta1) %*% solve(Ebeta,tol=1e-25))
   I = 1/Etau *(c(Itau)+c(Itheta1)+c(Igamma1)+c(Ibeta))
   var.tau1=sum(I^2)/(n^2)
   # variance estimator for tau0
-  Itau = w.con*(1-Z)*Event*((Time>=u)-tau0)/Kc.con
+  Itau = w.con*(1-Z)*(Event*(Time<=u)/Kc.con-(1-tau0))
   Itheta0 = ( (1-Z)*( ((1-Event) - Time^gamma0.est * exp( c(X %*% theta0.est)))*X  ) ) %*% t(Htheta0 %*% solve(Etheta0,tol=1e-25))
   Igamma0 = Hgamma0 * 1/Egamma0 * (1-Z) * ( (1-Event)*(1/gamma0.est + log(Time)) - Time^gamma0.est * log(Time) * exp(c(X %*% theta0.est))  )
   Ibeta = ((Z-ps)*W) %*% t((Hbeta0) %*% solve(Ebeta,tol=1e-25))
@@ -90,26 +90,26 @@ S.IPW1=function(u=6,W,X,Z,Time,Event,ps.model,cen.trt.model,cen.con.model,...) {
   #Sgamma0 = (1-Z) * ( (1-Event)*(1/gamma0.est + log(Time)) - Time^gamma0.est *log(Time) *exp(c(X %*% theta0.est))   )
   # Taylor Expansion for the Survival function in treatment group
   w.trt = 1/ps
-  tau1 = sum(w.trt*Z*Event*as.numeric(Time>=u)/Kc.trt)/sum(w.trt*Z*Event/Kc.trt)
+  tau1 = 1-sum(w.trt*Z*Event*as.numeric(Time<=u)/Kc.trt)/sum(w.trt*Z)
   Etau = 1
-  Htheta1 = 1/n * t((w.trt * Z * Event * ((Time>=u) - tau1) )/Kc.trt * Time^gamma1.est * exp(c(X %*% theta1.est))) %*% X 
-  Hgamma1 = 1/n * sum( (w.trt * Z * Event * ((Time>=u) - tau1) )/Kc.trt * Time^gamma1.est * log(Time) * exp(c(X %*% theta1.est)))
-  Hbeta1  = 1/n * t((Z*Event*((Time>=u) - tau1))/Kc.trt) %*% (-1/(ps^2)*ps*(1-ps)*W)
+  Htheta1 = 1/n * t((w.trt * Z * Event * (Time<=u) )/Kc.trt * Time^gamma1.est * exp(c(X %*% theta1.est))) %*% X 
+  Hgamma1 = 1/n * sum( (w.trt * Z * Event * (Time<=u) )/Kc.trt * Time^gamma1.est * log(Time) * exp(c(X %*% theta1.est)))
+  Hbeta1  = 1/n * t( Z*(Event*(Time<=u)/Kc.trt - (1-tau1)) ) %*% (-1*ps*(1-ps)*X)
   # Taylor Expansion for the Survival function in control group
   w.con = 1/(1-ps)
-  tau0 = sum(w.con*(1-Z)*Event*as.numeric(Time>=u)/Kc.con)/sum(w.con*(1-Z)*Event/Kc.con)
-  Htheta0 = 1/n * t((w.con * (1-Z) * Event * ((Time>=u) - tau0) )/Kc.con * Time^gamma0.est * exp(c(X %*% theta0.est))) %*% X 
-  Hgamma0 = 1/n * sum( (w.con * (1-Z) * Event * ((Time>=u) - tau0) )/Kc.con * Time^gamma0.est * log(Time) * exp(c(X %*% theta0.est)))
-  Hbeta0  = 1/n * t(((1-Z)*Event*((Time>=u) - tau0))/Kc.con) %*% (1/((1-ps)^2) *ps*(1-ps)*W)
+  tau0 = 1-sum(w.con*(1-Z)*Event*as.numeric(Time<=u)/Kc.con)/sum(w.con*(1-Z))
+  Htheta0 = 1/n * t((w.con * (1-Z) * Event * (Time<=u) )/Kc.con * Time^gamma0.est * exp(c(X %*% theta0.est))) %*% X 
+  Hgamma0 = 1/n * sum( (w.con * (1-Z) * Event * (Time<=u) )/Kc.con * Time^gamma0.est * log(Time) * exp(c(X %*% theta0.est)))
+  Hbeta0  = 1/n * t( (1-Z)*(1-Event*(Time<=u)/Kc.con - (1-tau0))  ) %*% (ps*(1-ps)*X)
   # variance estimator for tau1
-  Itau = w.trt*Z*Event*((Time>=u)-tau1)/Kc.trt 
+  Itau = w.trt*Z*(Event*(Time<=u)/Kc.trt-(1-tau1))
   Itheta1 = ( Z*( ((1-Event) - Time^gamma1.est * exp( c(X %*% theta1.est)))*X  ) ) %*% t(Htheta1 %*% solve(Etheta1,tol=1e-25))
   Igamma1 = Hgamma1 * 1/Egamma1 * Z * ( (1-Event)*(1/gamma1.est + log(Time)) - Time^gamma1.est * log(Time) * exp(c(X %*% theta1.est))  )
   Ibeta = ((Z-ps)*W) %*% t((Hbeta1) %*% solve(Ebeta,tol=1e-25))
   I = 1/Etau *(c(Itau)+c(Itheta1)+c(Igamma1)+c(Ibeta))
   var.tau1=sum(I^2)/(n^2)
   # variance estimator for tau0
-  Itau = w.con*(1-Z)*Event*((Time>=u)-tau0)/Kc.con
+  Itau = w.con*(1-Z)*(Event*(Time<=u)/Kc.con-(1-tau0))
   Itheta0 = ( (1-Z)*( ((1-Event) - Time^gamma0.est * exp( c(X %*% theta0.est)))*X  ) ) %*% t(Htheta0 %*% solve(Etheta0,tol=1e-25))
   Igamma0 = Hgamma0 * 1/Egamma0 * (1-Z) * ( (1-Event)*(1/gamma0.est + log(Time)) - Time^gamma0.est * log(Time) * exp(c(X %*% theta0.est))  )
   Ibeta = ((Z-ps)*W) %*% t((Hbeta0) %*% solve(Ebeta,tol=1e-25))
