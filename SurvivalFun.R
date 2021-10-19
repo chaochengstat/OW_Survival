@@ -40,7 +40,7 @@ S.OW1=function(u=6,W,X,Z,Time,Event,ps.model,cen.trt.model,cen.con.model,...) {
   Etau = mean(ps*(1-ps))
   Htheta0 = 1/n * t((w.con * (1-Z) * Event * (Time<=u) )/Kc.con * Time^gamma0.est * exp(c(X %*% theta0.est))) %*% X 
   Hgamma0 = 1/n * sum( (w.con * (1-Z) * Event * (Time<=u) )/Kc.con * Time^gamma0.est * log(Time) * exp(c(X %*% theta0.est)))
-  Hbeta0  = 1/n * t( (1-Z)*(1-Event*(Time<=u)/Kc.con - (1-tau0))  ) %*% (ps*(1-ps)*X)
+  Hbeta0  = 1/n * t( (1-Z)*(Event*(Time<=u)/Kc.con - (1-tau0))  ) %*% (ps*(1-ps)*X)
   # variance estimator for tau1
   Itau = w.trt*Z*(Event*(Time<=u)/Kc.trt-(1-tau1))
   Itheta1 = ( Z*( ((1-Event) - Time^gamma1.est * exp( c(X %*% theta1.est)))*X  ) ) %*% t(Htheta1 %*% solve(Etheta1,tol=1e-25))
@@ -100,7 +100,7 @@ S.IPW1=function(u=6,W,X,Z,Time,Event,ps.model,cen.trt.model,cen.con.model,...) {
   tau0 = 1-sum(w.con*(1-Z)*Event*as.numeric(Time<=u)/Kc.con)/sum(w.con*(1-Z))
   Htheta0 = 1/n * t((w.con * (1-Z) * Event * (Time<=u) )/Kc.con * Time^gamma0.est * exp(c(X %*% theta0.est))) %*% X 
   Hgamma0 = 1/n * sum( (w.con * (1-Z) * Event * (Time<=u) )/Kc.con * Time^gamma0.est * log(Time) * exp(c(X %*% theta0.est)))
-  Hbeta0  = 1/n * t( (1-Z)*(1-Event*(Time<=u)/Kc.con - (1-tau0))  ) %*% (ps*(1-ps)*X)
+  Hbeta0  = 1/n * t( (1-Z)*(Event*(Time<=u)/Kc.con - (1-tau0))  ) %*% (ps*(1-ps)*X)
   # variance estimator for tau1
   Itau = w.trt*Z*(Event*(Time<=u)/Kc.trt-(1-tau1))
   Itheta1 = ( Z*( ((1-Event) - Time^gamma1.est * exp( c(X %*% theta1.est)))*X  ) ) %*% t(Htheta1 %*% solve(Etheta1,tol=1e-25))
