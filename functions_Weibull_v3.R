@@ -542,7 +542,7 @@ SurvEffectWeibull=function(Data,
                            PS.formula,
                            Censor.formula,
                            Type=1,
-                           Method="IPW",
+                           Method="IPTW",
                            alpha=0.1,
                            q=0.01) {
   # Data=rhc
@@ -553,7 +553,7 @@ SurvEffectWeibull=function(Data,
   # PS.formula=as.formula(paste(Treatment,"~",paste(Covariates,collapse="+"),sep=""))
   # Censor.formula=as.formula(paste("Surv(",SurvTime,",I(1-", Status,"))","~",paste(Covariates[-c(1:2)],collapse="+"),sep=""))
   # Type=1
-  # Method="IPW"
+  # Method="IPTW"
   # alpha=0.1
   # q=0.01
   # identify the baseline covariates, treatment indicator, survival time, 
@@ -581,7 +581,7 @@ SurvEffectWeibull=function(Data,
   cen.con.model = survreg(surv.formula, data=data.con,dist='weibull',score=T,control=survreg.control(maxiter=350))
   theta0.est = -cen.con.model$coefficients/cen.con.model$scale
   gamma0.est = 1/cen.con.model$scale
-  if (Method=="IPW") {
+  if (Method=="IPTW") {
     if (Type==1) {
       # Kc.trt = exp(-exp(c(X %*% theta1.est)) *Time^gamma1.est)
       # Kc.con = exp(-exp(c(X %*% theta0.est)) *Time^gamma0.est)
