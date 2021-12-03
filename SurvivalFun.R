@@ -247,7 +247,7 @@ SurvFun=function(Data,
                  PS.formula,
                  Censor.formula,
                  Type=1,
-                 Method="IPW") {
+                 Method="IPTW") {
   # Data=rhc
   # t=60
   # Treatment="swang1"
@@ -284,7 +284,7 @@ SurvFun=function(Data,
   cen.con.model = survreg(surv.formula, data=data.con,dist='weibull',score=T,control=survreg.control(maxiter=350))
   theta0.est = -cen.con.model$coefficients/cen.con.model$scale
   gamma0.est = 1/cen.con.model$scale
-  if (Method=="IPW") {
+  if (Method=="IPTW") {
     if (Type==1) {
       res=S.IPW1(t,W=W,X=X,Z=Z,Time=Time,Event=Event,ps.model=ps.model,cen.trt.model=cen.trt.model,cen.con.model=cen.con.model)
     } else {
