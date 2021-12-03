@@ -6,7 +6,7 @@ SurvEffectWithCox=function(Data,
                            PS.formula,
                            Censor.formula,
                            Type=1,
-                           Method="IPW",
+                           Method="IPTW",
                            alpha=0.05,
                            q=0.01) {
   CensorScoreFun=function(CoxModel,TimeVec) {
@@ -30,7 +30,7 @@ SurvEffectWithCox=function(Data,
   Data.con=subset(Data,Data[,Treatment]==0)
   assign("Data.con", Data.con, envir = .GlobalEnv)
   Censor.con.model = survival::coxph(Censor.formula,data=Data.con) 
-  if (Method=="IPW") {
+  if (Method=="IPTW") {
     w.trt = 1/PS[which(Data[,Treatment]==1)]
     w.con = 1/(1-PS[which(Data[,Treatment]==0)])
     if (Type==1) {
@@ -129,15 +129,15 @@ SurvEffectWithCox=function(Data,
       return(delta1-delta0)
     }
   } else {
-    stop("The Method should be one of the following four choices: IPW, OW, Symmetric, and Asymmetric.")
+    stop("The Method should be one of the following four choices: IPTW, OW, Symmetric, and Asymmetric.")
   }
 }
 
 
 AllSurvEffect=function(Data=rhc,t=60,Treatment="swang1",SurvTime="survtime",Status="death",
-                       PS.formula,Censor.formula,alpha,q) {
+                       PS.formula,Censor.formula,alpha=0.01,q=0.01) {
   Delta1=SurvEffect(Data=Data,t=t,Treatment=Treatment,SurvTime=SurvTime,Status=Status,
-                    PS.formula=PS.formula,Censor.formula=Censor.formula,Type=1,Method="IPW")
+                    PS.formula=PS.formula,Censor.formula=Censor.formula,Type=1,Method="IPTW")
   Delta2=SurvEffect(Data=Data,t=t,Treatment=Treatment,SurvTime=SurvTime,Status=Status,
                     PS.formula=PS.formula,Censor.formula=Censor.formula,Type=1,Method="OW")
   Delta3=SurvEffect(Data=Data,t=t,Treatment=Treatment,SurvTime=SurvTime,Status=Status,
@@ -145,7 +145,7 @@ AllSurvEffect=function(Data=rhc,t=60,Treatment="swang1",SurvTime="survtime",Stat
   Delta4=SurvEffect(Data=Data,t=t,Treatment=Treatment,SurvTime=SurvTime,Status=Status,
                     PS.formula=PS.formula,Censor.formula=Censor.formula,Type=1,Method="Asymmetric",q=q)
   Delta5=SurvEffect(Data=Data,t=t,Treatment=Treatment,SurvTime=SurvTime,Status=Status,
-                    PS.formula=PS.formula,Censor.formula=Censor.formula,Type=2,Method="IPW")
+                    PS.formula=PS.formula,Censor.formula=Censor.formula,Type=2,Method="IPTW")
   Delta6=SurvEffect(Data=Data,t=t,Treatment=Treatment,SurvTime=SurvTime,Status=Status,
                     PS.formula=PS.formula,Censor.formula=Censor.formula,Type=2,Method="OW")
   Delta7=SurvEffect(Data=Data,t=t,Treatment=Treatment,SurvTime=SurvTime,Status=Status,
@@ -153,6 +153,6 @@ AllSurvEffect=function(Data=rhc,t=60,Treatment="swang1",SurvTime="survtime",Stat
   Delta8=SurvEffect(Data=Data,t=t,Treatment=Treatment,SurvTime=SurvTime,Status=Status,
                     PS.formula=PS.formula,Censor.formula=Censor.formula,Type=2,Method="Asymmetric",q=q)
   output=c(Delta1,Delta2,Delta3,Delta4,Delta5,Delta6,Delta7,Delta8)
-  names(output)=paste(rep(c("IPW","OW","Symmetric","Asymmetric"),2),rep(c(1,2),each=4),sep="")
+  names(output)=paste(rep(c("IPTW","OW","Symmetric","Asymmetric"),2),rep(c(1,2),each=4),sep="")
   output
 }
