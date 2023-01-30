@@ -97,8 +97,8 @@ SurvEffectWithCox=function(Data,
     LowerPS <- max(min(PS0), min(PS1))
     UpperPS <- min(max(PS0), max(PS1))
     keep <- rep(NA, length(PS))
-    alpha0 <- as.numeric(quantile(PS0, 1-q/100))
-    alpha1 <- as.numeric(quantile(PS1, q/100))
+    alpha0 <- as.numeric(quantile(PS0, 1-q))
+    alpha1 <- as.numeric(quantile(PS1, q))
     keep[Data[,Treatment] == 0] <- ((PS0 >= alpha1) & (PS0 <= alpha0) & (PS0 >= LowerPS) & (PS0 <= UpperPS))
     keep[Data[,Treatment] == 1] <- ((PS1 >= alpha1) & (PS1 <= alpha0) & (PS1 >= LowerPS) & (PS1 <= UpperPS))
     Data.trim=Data[keep,]
