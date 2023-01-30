@@ -198,8 +198,8 @@ IPWA.f=function(u=6,W,X,Z,Time,Event,q,ps.model,...) {
   
   # PS Asymmetric trimming
   keep <- rep(NA, length(Z))
-  alpha0 <- as.numeric(quantile(ps0, 1-q/100))
-  alpha1 <- as.numeric(quantile(ps1, q/100))
+  alpha0 <- as.numeric(quantile(ps0, 1-q))
+  alpha1 <- as.numeric(quantile(ps1, q))
   keep[Z == 0] <- ((ps0 >= alpha1) & (ps0 <= alpha0) & (ps0 >= lps) & (ps0 <= ups))
   keep[Z == 1] <- ((ps1 >= alpha1) & (ps1 <= alpha0) & (ps1 >= lps) & (ps1 <= ups))
   ptrim <- 1 - mean(keep)
@@ -694,7 +694,7 @@ SurvEffectWeibull=function(Data,
       # w.con = 1/(1-ps)
       # tau0 = sum(w.con*(1-Z)*Event*as.numeric(Time>=t)/Kc.con)/sum(w.con*(1-Z)*Event/Kc.con)
       # return(tau1-tau0)
-      res=IPWA.f(t,W=W,X=X,Z=Z,Time=Time,Event=Event,ps.model=ps.model,q=0.01)
+      res=IPWA.f(t,W=W,X=X,Z=Z,Time=Time,Event=Event,ps.model=ps.model,q=q)
     } else {
       # Kc.trt = exp(-exp(c(X %*% theta1.est)) *t^gamma1.est)
       # Kc.con = exp(-exp(c(X %*% theta0.est)) *t^gamma0.est)
@@ -703,7 +703,7 @@ SurvEffectWeibull=function(Data,
       # w.con = 1/(1-ps)
       # tau0 = sum(w.con*(1-Z)*as.numeric(Time>=t)/Kc.con)/sum(w.con*(1-Z))
       # return(tau1-tau0)
-      res=IPWA.f2(t,W=W,X=X,Z=Z,Time=Time,Event=Event,ps.model=ps.model,q=0.01)
+      res=IPWA.f2(t,W=W,X=X,Z=Z,Time=Time,Event=Event,ps.model=ps.model,q=q)
     }
   }
   output=c(Estimate=res[1],SE=sqrt(res[2]),CI.lower=res[1]-1.96*sqrt(res[2]),CI.upper=res[1]+1.96*sqrt(res[2]))
